@@ -8,6 +8,9 @@
         scheme.path = 'div > p'
     }
 
+
+    // TODO: figure out a way to convey that a view is "WIP", for example a string needs to have a path, but it starts off with an empty path, this is not ideal, better to have a `finalized` field or some state transitions
+
     let content = $derived(`${scheme.path} CONTENT`)
 
     $effect(() => {
