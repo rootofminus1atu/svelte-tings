@@ -1,31 +1,46 @@
-// core types:
-export const SchemeType = {
-    String: 'STRING',
-    Object: 'OBJECT',
-    List: 'LIST'
-} as const
 
-export type SchemeTypeValues = typeof SchemeType[keyof typeof SchemeType]
+export enum SchemeType {
+    String = 'STRING',
+    Object = 'OBJECT',
+    List = 'LIST',
+}
+
+export function emptyScheme(kind: SchemeType): Scheme {
+    if (kind === SchemeType.String) {
+        return {
+            type: SchemeType.String,
+            path: undefined,
+            mode: 'INNER_HTML',
+        };
+    } else if (kind === SchemeType.Object) {
+        return {
+            type: SchemeType.Object,
+            fields: [],
+        };
+    }
+
+    throw new Error('empty scheme not implemented')
+}
 
 export interface InsKVPair {
-    key: string,
+    key: string
     value?: Scheme
 }
 
 export interface ObjectScheme {
-    type: typeof SchemeType.Object
+    type: SchemeType.Object
     fields: InsKVPair[]
 }
 
 export interface ListScheme {
-    type: typeof SchemeType.List
+    type: SchemeType.List
     element_scheme: Scheme,
     path: string
 }
 
 export interface StringScheme {
-    type: typeof SchemeType.String
-    path: string,
+    type: SchemeType.String
+    path?: string,
     mode: 'INNER_HTML' | 'SRC'
 }
 
