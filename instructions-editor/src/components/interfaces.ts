@@ -50,3 +50,9 @@ export interface Instructions {
     url: string,
     scheme: Scheme
 }
+
+
+export interface SchemeV2 {
+    scheme: Scheme,
+    content: any
+}

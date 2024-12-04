@@ -2,6 +2,33 @@
     import { SchemeType, type Instructions } from "./interfaces";
     import SchemeView from "./SchemeView.svelte";
 
+    /*
+
+    custom syntax ideas:
+
+    Obj(
+        name: Str(div>p),
+        quotes: Lst<Str(li)>(div>ul),
+        details: Obj(
+            age: Str(div>div>p),
+            img: Str(div>div>div>p, SRC)
+        )
+    )
+
+    {
+        name: div>p,
+        quotes: div>ul [
+            li>ol [
+                li
+            ]
+        ],
+        details: {
+            age: div>div>p INNER_HTML,
+            img: div>div>div>p SRC
+        }
+    }
+
+    */
     const initialInstructions: Instructions = {
         url: 'https://website.com',
         scheme: {
@@ -13,6 +40,18 @@
                         type: SchemeType.String,
                         path: "div > p",
                         mode: "INNER_HTML"
+                    }
+                },
+                {
+                    key: "quotes",
+                    value: {
+                        type: SchemeType.List,
+                        path: "div > ul",
+                        element_scheme: {
+                            type: SchemeType.String,
+                            path: "li",
+                            mode: "INNER_HTML"
+                        }
                     }
                 },
                 {
@@ -40,6 +79,15 @@
                     }
                 }
             ]
+        }
+    }
+
+    const exampleScrapedData = {
+        name: "Walter",
+        quotes: ["Say my name", "I am the one who knocks!"],
+        details: {
+            age: "51",
+            height: "180"
         }
     }
     
