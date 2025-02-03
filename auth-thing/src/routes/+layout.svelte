@@ -4,46 +4,16 @@
     import { get } from 'aws-amplify/api';
     import { type AuthUser } from '@aws-amplify/auth/cognito';
     import { onMount } from "svelte";
+    import { handleSignIn, handleSignOut, initializeAuth, user } from '$lib/authStore.svelte';
 
     let { children } = $props()
 
-    let user = $state<AuthUser | null>(null)
     let username = $state('')
     let password = $state('')
 
     onMount(async () => {
-        try {
-            const currentUser = await getCurrentUser()
-            user = currentUser
-        } catch {
-            user = null
-        }
-    });
-
-    async function handleSignIn() {
-        try {
-            await signIn({
-                username,
-                password,
-                options: {
-                    authFlowType: "USER_SRP_AUTH"
-                }
-            })
-            user = await getCurrentUser()
-            console.log('logged in')
-        } catch (error) {
-            console.error('error signing in:', error)
-        }
-    }
-
-    async function handleSignOut() {
-        try {
-            await signOut()
-            user = null
-        } catch (error) {
-            console.error('error signing out:', error)
-        }
-    }
+        initializeAuth()
+    })
 
     async function getProjects() {
         try {
@@ -79,7 +49,7 @@
     <p>Welcome, {user.signInDetails?.loginId ?? user.username}!</p>
     <button onclick={handleSignOut}>Sign Out</button>
 {:else}
-    <form onsubmit={handleSignIn}>
+    <form onsubmit={() => handleSignIn(username, password)}>
         <input type="text" bind:value={username} placeholder="Username" />
         <input type="password" bind:value={password} placeholder="Password" />
         <button type="submit">Sign In</button>
