@@ -72,7 +72,8 @@
                                 value: {
                                     type: SchemeType.String,
                                     path: "div > ul > li:nth-of-type(2)",
-                                    mode: "INNER_HTML"
+                                    mode: "INNER_HTML",
+                                    
                                 }
                             }
                         ]

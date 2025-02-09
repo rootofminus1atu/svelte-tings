@@ -1,10 +1,9 @@
 <script lang="ts">
     import '$lib/aws-amplify'
-    import { signIn, signOut, getCurrentUser, fetchAuthSession } from 'aws-amplify/auth';
+    import { fetchAuthSession } from 'aws-amplify/auth';
     import { get } from 'aws-amplify/api';
-    import { type AuthUser } from '@aws-amplify/auth/cognito';
     import { onMount } from "svelte";
-    import { handleSignIn, handleSignOut, initializeAuth, user } from '$lib/authStore.svelte';
+    import { handleSignIn, handleSignOut, initializeAuth, auth } from '$lib/authStore.svelte';
 
     let { children } = $props()
 
@@ -45,8 +44,8 @@
     <a href="/about">About</a>
 </nav>
 
-{#if user}
-    <p>Welcome, {user.signInDetails?.loginId ?? user.username}!</p>
+{#if auth.user}
+    <p>Welcome, {auth.user?.signInDetails?.loginId ?? auth.user?.username}!</p>
     <button onclick={handleSignOut}>Sign Out</button>
 {:else}
     <form onsubmit={() => handleSignIn(username, password)}>
@@ -56,7 +55,7 @@
     </form>
 {/if}
 
-{#if user} 
+{#if auth.user} 
     <h3>Your projects:</h3>
     {#await getProjects()}
         <p>loading projects...</p>

@@ -1,13 +1,15 @@
 import { signIn, signOut, getCurrentUser, type AuthUser } from 'aws-amplify/auth';
 
-export let user = $state<AuthUser | null>(null)
+export const auth = $state({
+    user: null as AuthUser | null
+});
 
 export async function initializeAuth() {
     try {
-        const currentUser = await getCurrentUser()
-        user = currentUser
+        const currentUser = await getCurrentUser();
+        auth.user = currentUser;
     } catch {
-        user = null
+        auth.user = null;
     }
 }
 
@@ -19,21 +21,21 @@ export async function handleSignIn(username: string, password: string) {
             options: {
                 authFlowType: "USER_SRP_AUTH"
             }
-        })
-        user = await getCurrentUser()
-        console.log('logged in')
+        });
+        auth.user = await getCurrentUser();
+        console.log('logged in');
     } catch (error) {
-        console.error('error signing in:', error)
-        throw error
+        console.error('error signing in:', error);
+        throw error;
     }
 }
 
 export async function handleSignOut() {
     try {
-        await signOut()
-        user = null
+        await signOut();
+        auth.user = null;
     } catch (error) {
-        console.error('error signing out:', error)
-        throw error
+        console.error('error signing out:', error);
+        throw error;
     }
 }
